@@ -35,7 +35,7 @@ const Home = () => {
         animate="visible"
         className="max-w-4xl mx-auto text-center"
       >
-        {/* Profile Image */}
+        
         <motion.div variants={itemVariants} className="mb-8">
           <div className="relative inline-block">
             <motion.div
@@ -49,9 +49,11 @@ const Home = () => {
               transition={{ duration: 3, repeat: Infinity }}
               className="w-32 h-32 sm:w-40 sm:h-40 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 p-1"
             >
-              <div className="w-full h-full rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-4xl sm:text-5xl font-bold text-gray-600 dark:text-gray-300">
-                DS
-              </div>
+              <img
+                src="/src/assets/profile.jpg" // Update path as needed
+                alt="Profile"
+                className="w-full h-full object-cover rounded-full"
+              />
             </motion.div>
             <motion.div
               animate={{ rotate: 360 }}
@@ -64,15 +66,22 @@ const Home = () => {
         {/* Main Content */}
         <motion.div variants={itemVariants} className="space-y-6">
           <div className="space-y-4">
+            {/* New Header */}
+            <motion.h2
+              variants={itemVariants}
+              className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-gray-700 dark:text-blue-200"
+            >
+              Hi, I'm Simon
+            </motion.h2>
             <motion.h1
               variants={itemVariants}
               className="text-4xl sm:text-6xl lg:text-7xl font-bold"
             >
               <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-emerald-600 bg-clip-text text-transparent">
-                Full-Stack
+                Full-Stack MERN
               </span>
               <br />
-              <span className="text-gray-800 dark:text-white">Developer</span>
+              <span className="text-gray-800 dark:text-blue-200">Developer</span>
             </motion.h1>
             
             <motion.p
@@ -82,6 +91,7 @@ const Home = () => {
               Crafting exceptional digital experiences with modern technologies.
               Specializing in{' '}
               <span className="text-blue-600 dark:text-blue-400 font-semibold">React</span>,{' '}
+              <span className="text-blue-400 dark:text-blue-200 font-semibold">Express</span>,{' '}
               <span className="text-green-600 dark:text-green-400 font-semibold">Node.js</span>, and{' '}
               <span className="text-purple-600 dark:text-purple-400 font-semibold">MongoDB</span>.
             </motion.p>
