@@ -1,12 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Github, Linkedin, Mail, Heart, Code2 } from 'lucide-react';
+import logo2 from '../assets/logo2.png'; // Add this import at the top
 
 const Footer = () => {
   const socialLinks = [
-    { icon: Github, href: '#', label: 'GitHub' },
-    { icon: Linkedin, href: '#', label: 'LinkedIn' },
-    { icon: Mail, href: '#', label: 'Email' },
+    { icon: Github, href: 'https://github.com/SimonMuriu-cpu', label: 'GitHub' },
+    { icon: Linkedin, href: 'https://www.linkedin.com/in/simon-muriu-7b3645106/', label: 'LinkedIn' },
+    { icon: Mail, href: 'https://www.upwork.com/freelancers/~01d979a621275467be?mp_source=share', label: 'Email' },
   ];
 
   return (
@@ -20,10 +21,10 @@ const Footer = () => {
               transition={{ duration: 0.5 }}
               className="p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg"
             >
-              <Code2 className="h-6 w-6 text-white" />
+              <img src={logo2} alt="Logo" className="h-6 w-6 object-contain" />
             </motion.div>
             <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
-              DevSphere
+              SimbaStack
             </span>
           </div>
 
@@ -50,10 +51,10 @@ const Footer = () => {
             <div className="flex items-center justify-center space-x-1 text-sm text-gray-600 dark:text-gray-400">
               <span>Made with</span>
               <Heart className="h-4 w-4 text-red-500 fill-current" />
-              <span>using React & JavaScript</span>
+              <span>using React, Tailwindcss & JavaScript</span>
             </div>
             <p className="text-sm text-gray-500 dark:text-gray-500">
-              © 2025 DevSphere. All rights reserved.
+              © 2025 SimbaStack. All rights reserved.
             </p>
           </div>
         </div>

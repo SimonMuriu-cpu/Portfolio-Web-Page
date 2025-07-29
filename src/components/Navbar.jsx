@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Sun, Moon, Code2 } from 'lucide-react';
+import { Menu, X, Sun, Moon } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
+import logo2 from '../assets/logo2.png'; // Add this import at the top
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,6 +24,7 @@ const Navbar = () => {
     { name: 'About', path: '/about' },
     { name: 'Projects', path: '/projects' },
     { name: 'Contact', path: '/contact' },
+    { name: 'Blog', path: '/blog' },
   ];
 
   return (
@@ -42,13 +44,12 @@ const Navbar = () => {
             <motion.div
               whileHover={{ rotate: 360 }}
               transition={{ duration: 0.5 }}
-              className="p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg"
+              className="p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg mt-6 -ml-10"
             >
-              <Code2 className="h-6 w-6 text-white" />
+              {/* Replace icon with image */}
+              <img src={logo2} alt="Logo" className=" h-20 w-20 object-contain" />
             </motion.div>
-            <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
-              DevSphere
-            </span>
+            {/* Remove SimbaStack text if you only want the image */}
           </Link>
 
           {/* Desktop Navigation */}
@@ -73,6 +74,7 @@ const Navbar = () => {
               </Link>
             ))}
             
+
             {/* Theme Toggle */}
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -94,7 +96,7 @@ const Navbar = () => {
             >
               {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </motion.button>
-            
+
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300"

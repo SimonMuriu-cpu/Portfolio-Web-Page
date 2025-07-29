@@ -113,14 +113,16 @@ const Home = () => {
               </motion.button>
             </Link>
             
-            <motion.button
+            <motion.a
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="w-full sm:w-auto px-8 py-4 bg-white dark:bg-gray-800 text-gray-800 dark:text-white font-medium rounded-xl shadow-lg hover:shadow-xl border border-gray-200 dark:border-gray-700 transition-all duration-200 flex items-center justify-center space-x-2"
+              href="/src/assets/resume.pdf" // Update path as needed
+              download
             >
               <Download className="h-5 w-5" />
               <span>Download Resume</span>
-            </motion.button>
+            </motion.a>
           </motion.div>
 
           {/* Social Links */}
@@ -129,9 +131,9 @@ const Home = () => {
             className="flex justify-center space-x-6 pt-8"
           >
             {[
-              { icon: Github, href: '#', label: 'GitHub' },
-              { icon: Linkedin, href: '#', label: 'LinkedIn' },
-              { icon: ExternalLink, href: '#', label: 'Upwork' },
+              { icon: Github, href: 'https://github.com/SimonMuriu-cpu', label: 'GitHub' },
+              { icon: Linkedin, href: 'https://www.linkedin.com/in/simon-muriu-7b3645106/', label: 'LinkedIn' },
+              { icon: ExternalLink, href: 'https://www.upwork.com/freelancers/~01d979a621275467be?mp_source=share', label: 'Upwork' },
             ].map((social, index) => (
               <motion.a
                 key={index}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Send, Github, Linkedin, ExternalLink, CheckCircle } from 'lucide-react';
+import emailjs from 'emailjs-com';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -22,33 +23,42 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSubmitted(true);
-      setFormData({ name: '', email: '', subject: '', message: '' });
-      setTimeout(() => setIsSubmitted(false), 5000);
-    }, 2000);
+
+    // Replace these with your EmailJS values
+    const serviceID = 'service_e7fgjoh';
+    const templateID = 'template_17ah7yd';
+    const userID = 'vhwR4w1tiTou9cxcA';
+
+    emailjs.send(serviceID, templateID, formData, userID)
+      .then(() => {
+        setIsSubmitting(false);
+        setIsSubmitted(true);
+        setFormData({ name: '', email: '', subject: '', message: '' });
+        setTimeout(() => setIsSubmitted(false), 5000);
+      })
+      .catch(() => {
+        setIsSubmitting(false);
+        alert('Failed to send message. Please try again.');
+      });
   };
 
   const contactInfo = [
     {
       icon: Mail,
       label: 'Email',
-      value: 'hello@devsphere.dev',
-      href: 'mailto:hello@devsphere.dev',
+      value: 'muriumsimon6@gmail.com',
+      href: 'mailto:muriumsimon6@gmail.com',
     },
     {
       icon: Phone,
       label: 'Phone',
-      value: '+1 (555) 123-4567',
-      href: 'tel:+15551234567',
+      value: '+254 718391802',
+      href: 'tel:+254718391802',
     },
     {
       icon: MapPin,
       label: 'Location',
-      value: 'San Francisco, CA',
+      value: 'Nairobi, Kenya',
       href: '#',
     },
   ];
@@ -57,19 +67,19 @@ const Contact = () => {
     {
       icon: Github,
       label: 'GitHub',
-      href: '#',
+      href: 'https://github.com/SimonMuriu-cpu',
       color: 'hover:text-gray-900 dark:hover:text-white',
     },
     {
       icon: Linkedin,
       label: 'LinkedIn',
-      href: '#',
+      href: 'https://www.linkedin.com/in/simon-muriu-7b3645106/',
       color: 'hover:text-blue-600',
     },
     {
       icon: ExternalLink,
       label: 'Upwork',
-      href: '#',
+      href: 'https://www.upwork.com/freelancers/~01d979a621275467be?mp_source=share',
       color: 'hover:text-green-600',
     },
   ];
@@ -172,7 +182,7 @@ const Contact = () => {
                   Looking for a dedicated full-stack developer? I'm available for freelance projects and full-time opportunities.
                 </p>
                 <a
-                  href="#"
+                  href="https://www.upwork.com/freelancers/~01d979a621275467be?mp_source=share"
                   className="inline-flex items-center px-4 py-2 bg-white/20 rounded-lg hover:bg-white/30 transition-colors"
                 >
                   <ExternalLink className="h-4 w-4 mr-2" />
@@ -227,7 +237,7 @@ const Contact = () => {
                       value={formData.email}
                       onChange={handleChange}
                       className="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white transition-colors"
-                      placeholder="your@email.com"
+                      placeholder="Type your email..."
                     />
                   </div>
                 </div>

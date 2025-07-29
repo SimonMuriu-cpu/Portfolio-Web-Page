@@ -1,20 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { Lock, Eye, Edit, Trash2, Plus, Users, FolderOpen, Mail, BarChart3 } from 'lucide-react';
+import { Eye, Edit, Trash2, Plus, Users, FolderOpen, Mail, BarChart3, BookOpen } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
+import { Link } from 'react-router-dom';
 
 const AdminDashboard = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [credentials, setCredentials] = useState({ username: '', password: '' });
-
-  const handleLogin = (e) => {
-    e.preventDefault();
-    // Simple demo authentication
-    if (credentials.username === 'admin' && credentials.password === 'demo123') {
-      setIsAuthenticated(true);
-    } else {
-      alert('Demo credentials: admin / demo123');
-    }
-  };
+  const { logout } = useAuth();
 
   const stats = [
     { label: 'Total Projects', value: '12', icon: FolderOpen, color: 'from-blue-500 to-blue-600' },
@@ -35,86 +26,32 @@ const AdminDashboard = () => {
     { id: 3, name: 'Weather Dashboard', status: 'Published', views: 234 },
   ];
 
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="max-w-md w-full bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-white/20 dark:border-gray-700/20"
-        >
-          <div className="text-center mb-8">
-            <div className="p-4 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-              <Lock className="h-8 w-8 text-white" />
-            </div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Admin Login</h2>
-            <p className="text-gray-600 dark:text-gray-300 mt-2">Access the dashboard</p>
-          </div>
-
-          <form onSubmit={handleLogin} className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Username
-              </label>
-              <input
-                type="text"
-                value={credentials.username}
-                onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
-                className="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white"
-                placeholder="Enter username"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Password
-              </label>
-              <input
-                type="password"
-                value={credentials.password}
-                onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
-                className="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white"
-                placeholder="Enter password"
-              />
-            </div>
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              type="submit"
-              className="w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
-            >
-              Login
-            </motion.button>
-          </form>
-
-          <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
-            <p className="text-sm text-yellow-700 dark:text-yellow-300">
-              <strong>Demo Credentials:</strong><br />
-              Username: admin<br />
-              Password: demo123
-            </p>
-          </div>
-        </motion.div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-8">
           <div>
             <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Admin Dashboard</h1>
             <p className="text-gray-600 dark:text-gray-300 mt-2">Manage your portfolio content</p>
           </div>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setIsAuthenticated(false)}
-            className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-          >
-            Logout
-          </motion.button>
+          <div className="flex gap-3">
+            <Link
+              to="/admin/blog"
+              className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:shadow-lg transition-all"
+            >
+              <BookOpen className="h-4 w-4" />
+              <span>Manage Blog</span>
+            </Link>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={logout}
+              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+            >
+              Logout
+            </motion.button>
+          </div>
         </div>
 
         {/* Stats Grid */}
@@ -151,7 +88,7 @@ const AdminDashboard = () => {
               <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Recent Messages</h2>
               <button className="text-blue-600 dark:text-blue-400 hover:underline text-sm">View All</button>
             </div>
-            
+
             <div className="space-y-4">
               {recentMessages.map((message) => (
                 <div key={message.id} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
@@ -173,7 +110,7 @@ const AdminDashboard = () => {
             </div>
           </motion.div>
 
-          {/* Project Management */}
+          {/* Projects */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -186,7 +123,7 @@ const AdminDashboard = () => {
                 <span>Add Project</span>
               </button>
             </div>
-            
+
             <div className="space-y-4">
               {recentProjects.map((project) => (
                 <div key={project.id} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
@@ -194,7 +131,7 @@ const AdminDashboard = () => {
                     <h3 className="font-medium text-gray-900 dark:text-white">{project.name}</h3>
                     <div className="flex items-center space-x-4 mt-1">
                       <span className={`text-xs px-2 py-1 rounded-full ${
-                        project.status === 'Published' 
+                        project.status === 'Published'
                           ? 'bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300'
                           : 'bg-orange-100 dark:bg-orange-900/20 text-orange-700 dark:text-orange-300'
                       }`}>
