@@ -60,14 +60,7 @@ function LoginPage() {
         <meta name="description" content="Admin login page for the portfolio." />
       </HelmetProvider>
       <div className="min-h-screen flex flex-col items-center justify-center p-6">
-        <div className="absolute top-6 left-6">
-          <Link to="/">
-            <Button variant="ghost" className="text-white hover:text-purple-300">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Home
-            </Button>
-          </Link>
-        </div>
+        
         <motion.div
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}

@@ -90,10 +90,10 @@ const Home = () => {
             >
               Crafting exceptional digital experiences with modern technologies.
               Specializing in{' '}
-              <span className="text-blue-600 dark:text-blue-400 font-semibold">React</span>,{' '}
-              <span className="text-blue-400 dark:text-blue-200 font-semibold">Express</span>,{' '}
-              <span className="text-green-600 dark:text-green-400 font-semibold">Node.js</span>, and{' '}
-              <span className="text-purple-600 dark:text-purple-400 font-semibold">MongoDB</span>.
+              <span className="text-blue-800 dark:text-blue-400 font-semibold">React</span>,{' '}
+              <span className="text-blue-600 dark:text-blue-300 font-semibold">Express</span>,{' '}
+              <span className="text-purple-600 dark:text-purple-400 font-semibold">Node.js</span>, and{' '}
+              <span className="text-green-600 dark:text-green-400 font-semibold">MongoDB</span>.
             </motion.p>
           </div>
 

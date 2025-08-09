@@ -59,12 +59,12 @@ function BlogPage() {
         />
       </HelmetProvider>
 
-      <div className="min-h-screen">
+      <div className="min-h-screen bg-gray-200 dark:bg-blue-950 text-gray-800 dark:text-blue-200">
         {/* Navigation */}
         <nav className="p-6 border-b border-white/10">
           <div className="max-w-6xl mx-auto flex justify-between items-center">
             <Link to="/">
-              <Button variant="ghost" className="text-white hover:text-purple-300">
+              <Button variant="ghost" className="text-gray-800 dark:text-white hover:text-purple-600">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to Portfolio
               </Button>
@@ -73,7 +73,7 @@ function BlogPage() {
               <Link to="/admin">
                 <Button
                   variant="outline"
-                  className="border-purple-400 text-purple-300 hover:bg-purple-600 hover:text-white"
+                  className="border-purple-400 text-purple-600 dark:text-purple-300 hover:bg-purple-600 hover:text-white"
                 >
                   Admin Dashboard
                 </Button>
@@ -90,10 +90,10 @@ function BlogPage() {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent mb-6">
+            <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent mb-6">
               My Blog
             </h1>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
               Thoughts, insights, and stories from my journey in development and beyond.
             </p>
           </motion.div>
@@ -112,7 +112,7 @@ function BlogPage() {
                 placeholder="Search posts..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 bg-white/10 border-white/20 text-white placeholder-gray-400"
+                className="pl-10 bg-white/60 dark:bg-white/10 border border-gray-300 dark:border-white/20 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
               />
             </div>
 
@@ -125,7 +125,7 @@ function BlogPage() {
                   className={
                     selectedTag === ''
                       ? 'bg-purple-600 text-white'
-                      : 'border-purple-400 text-purple-300 hover:bg-purple-600 hover:text-white'
+                      : 'border-purple-400 text-purple-600 dark:text-purple-300 hover:bg-purple-600 hover:text-white'
                   }
                 >
                   All
@@ -139,7 +139,7 @@ function BlogPage() {
                     className={
                       selectedTag === tag
                         ? 'bg-purple-600 text-white'
-                        : 'border-purple-400 text-purple-300 hover:bg-purple-600 hover:text-white'
+                        : 'border-purple-400 text-purple-600 dark:text-purple-300 hover:bg-purple-600 hover:text-white'
                     }
                   >
                     <Tag className="mr-1 h-3 w-3" />
@@ -158,9 +158,9 @@ function BlogPage() {
               transition={{ duration: 0.6, delay: 0.4 }}
               className="text-center py-20"
             >
-              <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-12 border border-white/10 max-w-md mx-auto">
-                <h3 className="text-2xl font-bold text-white mb-4">No Posts Found</h3>
-                <p className="text-gray-300 mb-6">
+              <div className="bg-white/70 dark:bg-white/5 backdrop-blur-lg rounded-2xl p-12 border border-gray-200 dark:border-white/10 max-w-md mx-auto">
+                <h3 className="text-2xl font-bold text-gray-700 dark:text-white mb-4">No Posts Found</h3>
+                <p className="text-gray-600 dark:text-gray-300 mb-6">
                   {searchTerm || selectedTag
                     ? 'No posts match your search criteria.'
                     : 'There are no blog posts yet. Check back later!'}

@@ -23,13 +23,13 @@ export function Card({ post }) {
   const tags = Array.isArray(post.tags) ? post.tags : [];
 
   return (
-    <Link to={`/blog/${post.id}`}>
-      <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300 h-full flex flex-col group">
+    <Link to={`/blog/${post._id}`}>
+      <div className="bg-gray-100 dark:bg-blue-950 backdrop-blur-lg rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300 h-full flex flex-col group">
         <div className="flex-1">
-          <h3 className="text-xl font-bold text-white mb-3 group-hover:text-purple-300 transition-colors">
+          <h3 className="text-xl font-bold text-purple-950 dark:text-gray-200 mb-3 group-hover:text-purple-300 transition-colors">
             {post.title}
           </h3>
-          <p className="text-gray-300 mb-4 line-clamp-3">
+          <p className="text-blue-500 dark:text-gray-300 mb-4 line-clamp-3">
             {post.content?.substring(0, 150)}...
           </p>
 

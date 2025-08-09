@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; 
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
-import { Textarea } from '../components/ui/textarea';
 import { ArrowLeft, Save, Plus, X } from 'lucide-react';
 import { useToast } from '../components/ui/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { createPost } from '@/services/api';
+import RichTextEditor from '../components/editor/RichTextEditor'
+
 
 function CreatePostPage() {
   const navigate = useNavigate();
@@ -24,6 +25,10 @@ function CreatePostPage() {
 
   const [newTag, setNewTag] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPublishModal, setShowPublishModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [body, setBody] = useState('');
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -52,30 +57,16 @@ function CreatePostPage() {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!formData.title.trim() || !formData.content.trim()) {
-      toast({
-        title: 'Missing required fields',
-        description: 'Please fill in both title and content.',
-        variant: 'destructive',
-      });
-      return;
-    }
-
+  const submitPost = async () => {
     setIsSubmitting(true);
-
     try {
-      await createPost(formData, token);
-
-      const userChoice = window.confirm("✅ Post created successfully!\n\nWould you like to go to the blog page to view it?");
-
-      if (userChoice) {
-        navigate('/blog');
-      }
-      // If not, stay on the current page
-
+      await createPost(
+        {...formData, content: body },
+        token
+      );
+      
+      setShowSuccessModal(true);
+      
     } catch (error) {
       console.error('Error creating post:', error);
       toast({
@@ -85,7 +76,26 @@ function CreatePostPage() {
       });
     } finally {
       setIsSubmitting(false);
+      setShowPublishModal(false);
     }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!formData.title.trim() || !body.trim()) {
+      toast({
+        title: 'Missing required fields',
+        description: 'Please fill in both title and content.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    
+    // Merge editor content into formData now
+    setFormData(prev => ({ ...prev, content: body }));
+    
+    // Open publish confirmation modal
+    setShowPublishModal(true);
   };
 
   return (
@@ -118,12 +128,12 @@ function CreatePostPage() {
 
         <div className="max-w-4xl mx-auto px-6 py-12">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-8">Create New Post</h1>
+            <h1 className="text-4xl md:text-5xl font-bold text-purple-900 dark:text-blue-50 mb-8">Create New Post</h1>
 
             <form onSubmit={handleSubmit} className="space-y-8">
               {/* Title */}
               <div className="space-y-2">
-                <Label htmlFor="title" className="text-white text-lg font-semibold">Title *</Label>
+                <Label htmlFor="title" className="text-purple-900 dark:text-blue-100 text-lg font-semibold">Title *</Label>
                 <Input
                   id="title"
                   name="title"
@@ -138,7 +148,7 @@ function CreatePostPage() {
 
               {/* Tags */}
               <div className="space-y-2">
-                <Label className="text-white text-lg font-semibold">Tags</Label>
+                <Label className="text-purple-900 dark:text-blue-100 text-lg font-semibold">Tags</Label>
                 <div className="flex gap-2">
                   <Input
                     type="text"
@@ -173,17 +183,12 @@ function CreatePostPage() {
 
               {/* Content */}
               <div className="space-y-2">
-                <Label htmlFor="content" className="text-white text-lg font-semibold">Content *</Label>
-                <Textarea
-                  id="content"
-                  name="content"
-                  value={formData.content}
-                  onChange={handleInputChange}
-                  placeholder="Write your post content here..."
-                  className="bg-white/10 border-white/20 text-white placeholder-gray-400 min-h-[400px] resize-y"
-                  required
-                />
+                <Label htmlFor="content" className="text-purple-900 dark:text-blue-50 text-lg font-semibold">Content *</Label>
+                <div className="bg-white/10 border border-white/20 text-white min-h-[400px] rounded-md overflow-hidden p-0">
+                  <RichTextEditor content={body} onChange={setBody} />
+                </div>
               </div>
+              
 
               {/* Buttons */}
               <div className="flex gap-4">
@@ -209,6 +214,34 @@ function CreatePostPage() {
           </motion.div>
         </div>
       </div>
+
+      {/* Publish Modal */}
+      {showPublishModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+          <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full text-center">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">Are you sure?</h2>
+            <p className="text-gray-600 mb-6">Do you want to publish this post?</p>
+            <div className="flex justify-center gap-4">
+              <Button variant="outline" onClick={() => setShowPublishModal(false)}>Cancel</Button>
+              <Button onClick={submitPost} className="bg-purple-600 hover:bg-purple-700 text-white">Yes</Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+          <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full text-center">
+            <h2 className="text-xl font-semibold text-green-700 mb-4">✅ Post created successfully!</h2>
+            <p className="text-gray-700 mb-6">Would you like to go to the blog page to view it?</p>
+            <div className="flex justify-center gap-4">
+              <Button variant="outline" onClick={() => navigate('/admin/blog')}>No</Button>
+              <Button onClick={() => navigate('/blog')} className="bg-purple-600 hover:bg-purple-700 text-white">Yes</Button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

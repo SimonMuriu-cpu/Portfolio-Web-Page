@@ -19,6 +19,7 @@ import EditPostPage from './blog/EditPostPage';
 import BlogLoginPage from './blog/BlogLoginPage';
 import CreatePostPage from './blog/CreatePostPage';
 import ProtectedRoute from './components/ProtectedRoute';
+import BlogPost from './blog/BlogPost';
 
 function App() {
   return (
@@ -39,6 +40,8 @@ function App() {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/blog-home" element={<BlogHomePage />} />
                 <Route path="/blog-login" element={<BlogLoginPage />} />
+                <Route path="/admin/blog/edit/:id" element={<EditPostPage />} />
+                <Route path="/blog/:postId" element={<BlogPost />} />
 
                 {/* ✅ Admin Login Route (entry point to admin) */}
                 <Route path="/admin" element={<AdminLoginPage />} />

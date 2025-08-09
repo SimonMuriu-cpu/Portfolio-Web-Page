@@ -1,0 +1,15 @@
+.editor-input {
+  min-height: 200px;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: white;
+  color: black;
+  outline: none;
+}
+
+.editor-placeholder {
+  color: #aaa;
+  position: absolute;
+  pointer-events: none;
+}

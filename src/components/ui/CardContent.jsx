@@ -7,11 +7,13 @@ const CardContent = ({ title, content, createdAt }) => {
 
   return (
     <div className="p-4">
-      <h2 className="text-xl font-semibold text-gray-800 mb-2">{title}</h2>
-      <p className="text-gray-600 text-sm mb-3">
+      <h2 className="text-xl font-semibold text-blue-800 dark:text-white mb-2">
+        {title}
+      </h2>
+      <p className="text-gray-700 dark:text-gray-300 text-sm mb-3">
         {truncatedContent}
       </p>
-      <span className="text-xs text-gray-400">
+      <span className="text-xs text-gray-500 dark:text-gray-400">
         {formatDistanceToNow(new Date(createdAt), { addSuffix: true })}
       </span>
     </div>

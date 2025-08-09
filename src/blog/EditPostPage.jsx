@@ -1,39 +1,36 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Link, useParams, useNavigate } from 'react-router-dom';
-import { HelmetProvider } from 'react-helmet-async';
-import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import { Label } from '../components/ui/label';
-import { Textarea } from '../components/ui/textarea';
-import { ArrowLeft, Save, Plus, X } from 'lucide-react';
-import { useToast } from '../components/ui/use-toast';
-import { useAuth } from '@/contexts/AuthContext';
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { getPostById, updatePost } from '@/services/api';
+import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '../components/ui/use-toast';
+import { Input } from '../components/ui/input';
+import { Button } from '../components/ui/button';
+import { Label } from '../components/ui/label';
+import { motion } from 'framer-motion';
+import { HelmetProvider } from 'react-helmet-async';
+import { Loader2 } from 'lucide-react';
 
-function EditPostPage() {
+const EditPostPage = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
-  const { toast } = useToast();
   const { token } = useAuth();
-
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     title: '',
     content: '',
     tags: [],
   });
 
-  const [newTag, setNewTag] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const post = await getPostById(id, token);
+        const response = await getPostById(id, token);
+        const post = response?.data || response;
+
         setFormData({
-          title: post.title,
-          content: post.content,
+          title: post.title || '',
+          content: post.content || '',
           tags: post.tags || [],
         });
       } catch (error) {
@@ -42,7 +39,7 @@ function EditPostPage() {
           description: error?.response?.data?.message || 'Failed to fetch post details.',
           variant: 'destructive',
         });
-        navigate('/admin');
+        navigate('/admin/blog');
       } finally {
         setLoading(false);
       }
@@ -53,196 +50,104 @@ function EditPostPage() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleAddTag = () => {
-    const tag = newTag.trim();
-    if (tag && !formData.tags.includes(tag)) {
-      setFormData(prev => ({ ...prev, tags: [...prev.tags, tag] }));
-      setNewTag('');
-    }
-  };
-
-  const handleRemoveTag = (tagToRemove) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      tags: prev.tags.filter(tag => tag !== tagToRemove),
+      [name]: value,
     }));
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      handleAddTag();
-    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!formData.title.trim() || !formData.content.trim()) {
-      toast({
-        title: 'Missing required fields',
-        description: 'Please fill in both title and content.',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    setIsSubmitting(true);
-
     try {
       await updatePost(id, formData, token);
-
       toast({
         title: 'Post updated',
-        description: 'Your changes have been saved.',
+        description: 'The post has been successfully updated.',
       });
-
-      navigate('/admin');
+      navigate('/admin/blog');
     } catch (error) {
       toast({
-        title: 'Error updating post',
-        description: error?.response?.data?.message || 'Something went wrong. Please try again.',
+        title: 'Update failed',
+        description: error?.response?.data?.message || 'Could not update post.',
         variant: 'destructive',
       });
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-white text-xl">Loading...</div>
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="w-8 h-8 animate-spin text-gray-500" />
+        <span className="ml-2 text-gray-500">Loading post...</span>
       </div>
     );
   }
 
   return (
-    <>
-      <HelmetProvider>
-        <title>Edit Post - Admin</title>
-        <meta name="description" content="Edit your blog post content." />
-      </HelmetProvider>
+    <HelmetProvider>
+      <motion.div
+        className="max-w-3xl mx-auto p-4 bg-gray-200 dark:bg-blue-800 rounded-lg shadow-md mt-8"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+      >
+        <h1 className="text-2xl font-bold mb-6 text-blue-800 dark:text-gray-200">Edit Blog Post</h1>
+        <form onSubmit={handleSubmit} className="space-y-4" >
+          <div>
+            <Label htmlFor="title">Title</Label>
+            <Input
+              id="title"
+              name="title"
+              value={formData.title}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
 
-      <div className="min-h-screen">
-        {/* Nav */}
-        <nav className="p-6 border-b border-white/10">
-          <div className="max-w-4xl mx-auto flex justify-between items-center">
-            <Link to="/admin">
-              <Button variant="ghost" className="text-white hover:text-purple-300">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Dashboard
-              </Button>
-            </Link>
+          <div>
+            <Label htmlFor="content">Content</Label>
+            <textarea
+              id="content"
+              name="content"
+              value={formData.content}
+              onChange={handleInputChange}
+              className="w-full p-2 border rounded-md bg-white dark:bg-gray-200"
+              rows="10"
+              required
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="tags">Tags (comma-separated)</Label>
+            <Input
+              id="tags"
+              name="tags"
+              value={formData.tags}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  tags: e.target.value.split(',').map((tag) => tag.trim()),
+                }))
+              }
+            />
+          </div>
+
+          <div className="flex justify-between">
+            <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
+              Update Post
+            </Button>
             <Button
-              onClick={handleSubmit}
-              disabled={isSubmitting}
-              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
+              type="button"
+              variant="outline"
+              onClick={() => navigate('/admin/blog')}
             >
-              <Save className="mr-2 h-4 w-4" />
-              {isSubmitting ? 'Saving...' : 'Save Changes'}
+              Cancel
             </Button>
           </div>
-        </nav>
-
-        <div className="max-w-4xl mx-auto px-6 py-12">
-          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-8">Edit Post</h1>
-
-            <form onSubmit={handleSubmit} className="space-y-8">
-              {/* Title */}
-              <div className="space-y-2">
-                <Label htmlFor="title" className="text-white text-lg font-semibold">Title *</Label>
-                <Input
-                  id="title"
-                  name="title"
-                  type="text"
-                  value={formData.title}
-                  onChange={handleInputChange}
-                  placeholder="Enter your post title..."
-                  className="bg-white/10 border-white/20 text-white placeholder-gray-400 text-lg p-4 h-auto"
-                  required
-                />
-              </div>
-
-              {/* Tags */}
-              <div className="space-y-2">
-                <Label className="text-white text-lg font-semibold">Tags</Label>
-                <div className="flex gap-2">
-                  <Input
-                    type="text"
-                    value={newTag}
-                    onChange={(e) => setNewTag(e.target.value)}
-                    onKeyPress={handleKeyPress}
-                    placeholder="Add a tag..."
-                    className="bg-white/10 border-white/20 text-white placeholder-gray-400"
-                  />
-                  <Button
-                    type="button"
-                    onClick={handleAddTag}
-                    variant="outline"
-                    className="border-purple-400 text-purple-300 hover:bg-purple-600 hover:text-white"
-                  >
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </div>
-                {formData.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mt-3">
-                    {formData.tags.map(tag => (
-                      <span key={tag} className="inline-flex items-center px-3 py-1 bg-purple-600/30 text-purple-200 text-sm rounded-full">
-                        {tag}
-                        <button type="button" onClick={() => handleRemoveTag(tag)} className="ml-2 hover:text-white">
-                          <X className="h-3 w-3" />
-                        </button>
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Content */}
-              <div className="space-y-2">
-                <Label htmlFor="content" className="text-white text-lg font-semibold">Content *</Label>
-                <Textarea
-                  id="content"
-                  name="content"
-                  value={formData.content}
-                  onChange={handleInputChange}
-                  placeholder="Write your post content here..."
-                  className="bg-white/10 border-white/20 text-white placeholder-gray-400 min-h-[400px] resize-y"
-                  required
-                />
-              </div>
-
-              {/* Buttons */}
-              <div className="flex gap-4">
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-3"
-                >
-                  <Save className="mr-2 h-4 w-4" />
-                  {isSubmitting ? 'Saving...' : 'Save Changes'}
-                </Button>
-                <Link to="/admin">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="border-gray-400 text-gray-300 hover:bg-gray-600 hover:text-white px-8 py-3"
-                  >
-                    Cancel
-                  </Button>
-                </Link>
-              </div>
-            </form>
-          </motion.div>
-        </div>
-      </div>
-    </>
+        </form>
+      </motion.div>
+    </HelmetProvider>
   );
-}
+};
 
 export default EditPostPage;
