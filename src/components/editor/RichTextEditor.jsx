@@ -31,6 +31,23 @@ const RichTextEditor = ({ initialContent = '', onChange }) => {
     }
   }, [initialContent]);
 
+  useEffect(() => {
+   const editor = editorRef.current;
+   if (!editor) return;
+
+   const toggleImageSize = (e) => {
+    if (e.target.tagName === "IMG" && e.target.classList.contains("editor-image")) {
+      e.target.classList.toggle("max-w-full");
+      e.target.classList.toggle("w-full");
+    }
+  };
+
+  editor.addEventListener("click", toggleImageSize);
+  return () => editor.removeEventListener("click", toggleImageSize);
+}, []);
+
+
+
   const handleContentChange = () => {
     if (editorRef.current) {
       const content = editorRef.current.innerHTML;

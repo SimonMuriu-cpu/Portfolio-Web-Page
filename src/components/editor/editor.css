@@ -382,3 +382,9 @@
     transform: translateY(0);
   }
 }
+
+.editor-image {
+  display: inline-block;
+  resize: both;
+  overflow: auto;
+}

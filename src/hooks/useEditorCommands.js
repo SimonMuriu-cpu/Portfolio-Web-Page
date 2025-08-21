@@ -56,32 +56,26 @@ const useEditorCommands = (editorRef) => {
   }, [executeCommand]);
 
   const insertImage = useCallback((src) => {
-    if (!src) return;
+    if (!src || !editorRef.current) return;
     
-    const img = document.createElement('img');
-    img.src = src;
-    img.style.maxWidth = '100%';
-    img.style.height = 'auto';
-    img.style.display = 'block';
-    img.style.margin = '10px 0';
-    
-    if (!editorRef.current) return;
-    
-    const selection = window.getSelection();
-    if (selection.rangeCount > 0) {
-      const range = selection.getRangeAt(0);
-      range.deleteContents();
-      range.insertNode(img);
-      
-      // Move cursor after the image
-      range.setStartAfter(img);
-      range.setEndAfter(img);
-      selection.removeAllRanges();
-      selection.addRange(range);
-    } else {
-      editorRef.current.appendChild(img);
-    }
+    editorRef.current.focus();
+
+    // Tailwind-styled, toggleable image
+    const imgHTML = `
+    <img
+     src="${src}"
+     class="editor-image max-w-full h-auto my-2 rounded cursor-pointer transition-all duration-300"
+     style="max-width: 50%; height: auto; resize: both; overflow: auto;"
+     alt="Inserted Image"
+    />
+    `;
+    document.execCommand('insertHTML', false, imgHTML);
   }, [editorRef]);
+
+// Inserting images from computer raies the 413 error (Payload Too Large) in the server. 
+// I'll come back to handle this so that it uses a url instead, which means the image is uploaded to a server 
+// or cloud storage and then the URL is inserted into the editor.
+
 
   const insertVideo = useCallback((url) => {
     if (!url) return;

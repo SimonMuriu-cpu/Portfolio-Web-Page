@@ -282,6 +282,7 @@ const EditorToolBar = ({
           className="toolbar-btn"
           onClick={handleImageUrl}
           title="Insert Image from URL"
+          type="button"
         >
           🖼️
         </button>
@@ -289,6 +290,7 @@ const EditorToolBar = ({
           className="toolbar-btn"
           onClick={() => fileInputRef.current?.click()}
           title="Upload Image"
+          type="button"
         >
           📁
         </button>
@@ -298,6 +300,7 @@ const EditorToolBar = ({
           style={{ display: 'none' }}
           accept="image/*"
           onChange={handleImageUpload}
+          
         />
         <button
           className="toolbar-btn"

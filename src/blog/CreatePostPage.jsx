@@ -66,7 +66,7 @@ function CreatePostPage() {
       );
       
       setShowSuccessModal(true);
-      
+
     } catch (error) {
       console.error('Error creating post:', error);
       toast({
@@ -200,15 +200,16 @@ function CreatePostPage() {
                   <Save className="mr-2 h-4 w-4" />
                   {isSubmitting ? 'Publishing...' : 'Publish Post'}
                 </Button>
-                <Link to="/admin">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="border-gray-400 text-gray-300 hover:bg-gray-600 hover:text-white px-8 py-3"
-                  >
-                    Cancel
-                  </Button>
-                </Link>
+                
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="border-gray-400 text-gray-300 hover:bg-gray-600 hover:text-white px-8 py-3"
+                  onClick={() => navigate(-1)}
+                >
+                  Cancel
+                </Button>
+                
               </div>
             </form>
           </motion.div>
