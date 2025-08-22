@@ -1,70 +1,67 @@
+// src/contexts/AuthContext.jsx
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { jwtDecode } from "jwt-decode";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode"; // ← Changed to named import
 
-const AuthContext = createContext();
+const AuthContext = createContext(null);
+
+export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Update email to match backend expectations
+  // Load stored token on startup
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decoded = jwtDecode(token); // ← Now uses named import
+
+        // check if token expired
+        if (decoded.exp * 1000 < Date.now()) {
+          localStorage.removeItem("token");
+        } else {
+          setUser(decoded);
+          axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        }
+      } catch (err) {
+        console.error("Invalid token", err);
+        localStorage.removeItem("token");
+      }
+    }
+    setLoading(false);
+  }, []);
+
+  // Login function (only password required)
   const login = async (password) => {
     try {
-      const res = await axios.post("http://localhost:5000/api/login", {
-        email: "muriumsimon6@gmail.com", // must match process.env.ADMIN_EMAIL on server
-        password,
-      });
+      const res = await axios.post("http://localhost:5000/api/auth/login", { password });
+      const { token } = res.data;
 
-      const token = res.data.token;
       localStorage.setItem("token", token);
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-      const decoded = jwtDecode(token);
-      setUser({ ...decoded });
+      const decoded = jwtDecode(token); // ← Now uses named import
+      setUser(decoded);
 
       return true;
     } catch (err) {
-      console.error("Login failed:", err.response?.data?.message || err.message);
+      console.error("Login failed", err.response?.data || err.message);
       return false;
     }
   };
 
+  // Logout function
   const logout = () => {
     localStorage.removeItem("token");
+    delete axios.defaults.headers.common["Authorization"];
     setUser(null);
   };
 
-  const checkAuth = () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setUser(null);
-      return;
-    }
-
-    try {
-      const decoded = jwtDecode(token);
-      const isExpired = decoded.exp * 1000 < Date.now();
-      if (isExpired) {
-        logout();
-      } else {
-        setUser({ ...decoded });
-      }
-    } catch (err) {
-      console.error("Token decode error:", err);
-      logout();
-    }
-  };
-
-  useEffect(() => {
-    checkAuth(); // Check auth on mount
-  }, []);
-
-  const isAuthenticated = !!user;
-
   return (
-    <AuthContext.Provider value={{ user, login, logout, checkAuth, isAuthenticated }}>
+    <AuthContext.Provider value={{ user, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
 };
-
-export const useAuth = () => useContext(AuthContext);

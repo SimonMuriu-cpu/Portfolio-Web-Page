@@ -16,7 +16,6 @@ import BlogPostPage from './blog/BlogPostPage';
 import LoginPage from './pages/LoginPage';
 import BlogHomePage from './blog/BlogHomePage';
 import EditPostPage from './blog/EditPostPage';
-import BlogLoginPage from './blog/BlogLoginPage';
 import CreatePostPage from './blog/CreatePostPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import BlogPost from './blog/BlogPost';
@@ -39,7 +38,6 @@ function App() {
                 <Route path="/blog-post" element={<BlogPostPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/blog-home" element={<BlogHomePage />} />
-                <Route path="/blog-login" element={<BlogLoginPage />} />
                 <Route path="/admin/blog/edit/:id" element={<EditPostPage />} />
                 <Route path="/blog/:postId" element={<BlogPost />} />
 

@@ -1,7 +1,6 @@
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
-// Middleware to verify JWT token
-const protect = (req, res, next) => {
+export const authenticate = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -12,11 +11,9 @@ const protect = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // optional: you can attach user info to the request object
+    req.user = decoded;
     next();
   } catch (error) {
     res.status(401).json({ message: 'Token is not valid' });
   }
 };
-
-module.exports = protect;

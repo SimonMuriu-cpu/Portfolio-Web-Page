@@ -1,17 +1,12 @@
-import React, { useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import React from "react";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext"; // use the hook
 
 const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, checkAuth } = useAuth();
+  const { user, loading } = useAuth();
 
-  useEffect(() => {
-    checkAuth(); // Ensures we check token validity on mount
-  }, []);
-
-  if (!isAuthenticated) {
-    return <Navigate to="/admin" replace />;
-  }
+  if (loading) return <div>Loading...</div>;
+  if (!user) return <Navigate to="/admin" replace />;
 
   return children;
 };

@@ -1,9 +1,10 @@
-const Post = require('../models/Post');
+// server/controllers/postController.js
+import Post from '../models/Post.js';
 
 // @desc    Get all posts
 // @route   GET /api/posts
 // @access  Public
-const getPosts = async (req, res) => {
+export const getPosts = async (req, res) => {
   try {
     const posts = await Post.find().sort({ createdAt: -1 });
     res.json(posts);
@@ -15,7 +16,7 @@ const getPosts = async (req, res) => {
 // @desc    Get a single post by ID
 // @route   GET /api/posts/:id
 // @access  Public
-const getPostById = async (req, res) => {
+export const getPostById = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
     if (!post) return res.status(404).json({ message: 'Post not found' });
@@ -28,7 +29,7 @@ const getPostById = async (req, res) => {
 // @desc    Create a new post
 // @route   POST /api/posts
 // @access  Private (Admin)
-const createPost = async (req, res) => {
+export const createPost = async (req, res) => {
   const { title, content, image, category } = req.body;
   try {
     const newPost = new Post({
@@ -47,7 +48,7 @@ const createPost = async (req, res) => {
 // @desc    Update a post
 // @route   PUT /api/posts/:id
 // @access  Private (Admin)
-const updatePost = async (req, res) => {
+export const updatePost = async (req, res) => {
   const { title, content, image, category } = req.body;
   try {
     const updatedPost = await Post.findByIdAndUpdate(
@@ -65,7 +66,7 @@ const updatePost = async (req, res) => {
 // @desc    Delete a post
 // @route   DELETE /api/posts/:id
 // @access  Private (Admin)
-const deletePost = async (req, res) => {
+export const deletePost = async (req, res) => {
   try {
     const deletedPost = await Post.findByIdAndDelete(req.params.id);
     if (!deletedPost) return res.status(404).json({ message: 'Post not found' });
@@ -73,12 +74,4 @@ const deletePost = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Failed to delete post' });
   }
-};
-
-module.exports = {
-  getPosts,
-  getPostById,
-  createPost,
-  updatePost,
-  deletePost,
 };

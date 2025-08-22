@@ -1,7 +1,9 @@
-const express = require('express');
+// server/routes/postRoutes.js
+import express from 'express';
+import { getPosts, getPostById, createPost, updatePost, deletePost } from '../controllers/postController.js';
+import { authenticate } from '../middleware/authMiddleware.js';
+
 const router = express.Router();
-const { getPosts, getPostById, createPost, updatePost, deletePost } = require('../controllers/postController');
-const authenticate = require('../middleware/authMiddleware');
 
 // Public routes
 router.get('/', getPosts);
@@ -12,4 +14,4 @@ router.post('/', authenticate, createPost);
 router.put('/:id', authenticate, updatePost);
 router.delete('/:id', authenticate, deletePost);
 
-module.exports = router;
+export default router;

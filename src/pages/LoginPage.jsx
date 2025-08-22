@@ -1,43 +1,39 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { HelmetProvider } from 'react-helmet-async';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { useToast } from '../components/ui/use-toast';
-import { LogIn, ArrowLeft } from 'lucide-react';
+import { LogIn } from 'lucide-react';
+import { useAuth } from "../contexts/AuthContext";
 
 function LoginPage() {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      const res = await fetch('http://localhost:5000/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({  email: 'muriumsimon6@gmail.com', password }),
-      });
+      // Use AuthContext's login function which handles the API call
+      const success = await login(password);
 
-      const data = await res.json();
-
-      if (res.ok) {
-        localStorage.setItem('token', data.token); // Store token
+      if (success) {
         toast({
           title: 'Login Successful!',
           description: 'Welcome back, admin!',
         });
-        navigate('/admin/dashboard');
+        setTimeout(() => navigate('/admin/dashboard'), 100);
       } else {
         toast({
           title: 'Login Failed',
-          description: data.message || 'Incorrect password.',
+          description: 'Incorrect password.',
           variant: 'destructive',
         });
         setPassword('');
