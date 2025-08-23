@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Download, ExternalLink, Github, Linkedin } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Tracking, TrackedSocialLink } from '../utils/tracking';
 
 const Home = () => {
+  // Initialize tracking on component mount
+  useEffect(() => {
+    Tracking.init();
+  }, []);
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -125,30 +131,48 @@ const Home = () => {
             </motion.a>
           </motion.div>
 
-          {/* Social Links */}
-          <motion.div
-            variants={itemVariants}
-            className="flex justify-center space-x-6 pt-8"
+          {/* Social Links - Updated with tracking */}
+          <TrackedSocialLink
+            href="https://github.com/SimonMuriu-cpu"
+            platform="github"
           >
-            {[
-              { icon: Github, href: 'https://github.com/SimonMuriu-cpu', label: 'GitHub' },
-              { icon: Linkedin, href: 'https://www.linkedin.com/in/simon-muriu-7b3645106/', label: 'LinkedIn' },
-              { icon: ExternalLink, href: 'https://www.upwork.com/freelancers/~01d979a621275467be?mp_source=share', label: 'Upwork' },
-            ].map((social, index) => (
-              <motion.a
-                key={index}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.1, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-                className="p-4 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-white dark:hover:bg-gray-800 transition-all duration-200 shadow-lg"
-                aria-label={social.label}
-              >
-                <social.icon className="h-6 w-6" />
-              </motion.a>
-            ))}
-          </motion.div>
+            <motion.div
+              whileHover={{ scale: 1.1, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              className="p-4 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-white dark:hover:bg-gray-800 transition-all duration-200 shadow-lg"
+              aria-label="GitHub"
+            >
+              <Github className="h-6 w-6" />
+            </motion.div>
+          </TrackedSocialLink>
+
+          <TrackedSocialLink
+            href="https://www.linkedin.com/in/simon-muriu-7b3645106/"
+            platform="linkedin"
+          >
+            <motion.div
+              whileHover={{ scale: 1.1, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              className="p-4 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-white dark:hover:bg-gray-800 transition-all duration-200 shadow-lg"
+              aria-label="LinkedIn"
+            >
+              <Linkedin className="h-6 w-6" />
+            </motion.div>
+          </TrackedSocialLink>
+
+          <TrackedSocialLink
+            href="https://www.upwork.com/freelancers/~01d979a621275467be?mp_source=share"
+            platform="upwork"
+          >
+            <motion.div
+              whileHover={{ scale: 1.1, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              className="p-4 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-white dark:hover:bg-gray-800 transition-all duration-200 shadow-lg"
+              aria-label="Upwork"
+            >
+              <ExternalLink className="h-6 w-6" />
+            </motion.div>
+          </TrackedSocialLink>
         </motion.div>
 
         {/* Scroll Indicator */}

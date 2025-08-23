@@ -10,7 +10,7 @@ import Contact from './pages/Contact';
 import AdminDashboard from './pages/AdminDashboard';
 import Footer from './components/Footer';
 import BlogPage from './blog/BlogPage'; 
-import AdminLoginPage from "./pages/LoginPage"; // ✅ Used below as /admin
+import AdminLoginPage from "./pages/LoginPage";
 import BlogAdminDashboardPage from './blog/BlogAdminDashboardPage';
 import BlogPostPage from './blog/BlogPostPage'; 
 import LoginPage from './pages/LoginPage';
@@ -19,6 +19,7 @@ import EditPostPage from './blog/EditPostPage';
 import CreatePostPage from './blog/CreatePostPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import BlogPost from './blog/BlogPost';
+import Layout from '@/components/Layout'; // Import the Layout component
 
 function App() {
   return (
@@ -29,43 +30,50 @@ function App() {
             <Navbar />
             <main className="pt-16">
               <Routes>
-                {/* Public Routes */}
-                <Route path="/" element={<Home />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/projects" element={<Projects />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/blog" element={<BlogPage />} />
-                <Route path="/blog-post" element={<BlogPostPage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/blog-home" element={<BlogHomePage />} />
-                <Route path="/admin/blog/edit/:id" element={<EditPostPage />} />
-                <Route path="/blog/:postId" element={<BlogPost />} />
+                {/* Public Routes - Wrapped with Layout for tracking */}
+                <Route path="/" element={<Layout><Home /></Layout>} />
+                <Route path="/about" element={<Layout><About /></Layout>} />
+                <Route path="/projects" element={<Layout><Projects /></Layout>} />
+                <Route path="/contact" element={<Layout><Contact /></Layout>} />
+                <Route path="/blog" element={<Layout><BlogPage /></Layout>} />
+                <Route path="/blog-post" element={<Layout><BlogPostPage /></Layout>} />
+                <Route path="/login" element={<Layout><LoginPage /></Layout>} />
+                <Route path="/blog-home" element={<Layout><BlogHomePage /></Layout>} />
+                <Route path="/blog/:postId" element={<Layout><BlogPost /></Layout>} />
 
                 {/* ✅ Admin Login Route (entry point to admin) */}
-                <Route path="/admin" element={<AdminLoginPage />} />
+                <Route path="/admin" element={<Layout><AdminLoginPage /></Layout>} />
 
-                {/* ✅ Admin Protected Routes */}
+                {/* ✅ Admin Protected Routes - Also wrapped with Layout */}
                 <Route path="/admin/dashboard" element={
                   <ProtectedRoute>
-                    <AdminDashboard />
+                    <Layout>
+                      <AdminDashboard />
+                    </Layout>
                   </ProtectedRoute>
                 } />
                 
                 <Route path="/admin/blog" element={
                   <ProtectedRoute>
-                    <BlogAdminDashboardPage />
+                    <Layout>
+                      <BlogAdminDashboardPage />
+                    </Layout>
                   </ProtectedRoute>
                 } />
 
                 <Route path="/admin/create" element={
                   <ProtectedRoute>
-                    <CreatePostPage />
+                    <Layout>
+                      <CreatePostPage />
+                    </Layout>
                   </ProtectedRoute>
                 } />
 
                 <Route path="/edit-post/:id" element={
                   <ProtectedRoute>
-                    <EditPostPage />
+                    <Layout>
+                      <EditPostPage />
+                    </Layout>
                   </ProtectedRoute>
                 } />
               </Routes>
